@@ -422,6 +422,8 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
   // Iterates through pizza elements on the page and changes their widths
+  // No need for determineDx function - this makes the scripting much simpler
+  // and reduces the Javascript bottleneck
   function changePizzaSizes(size) {
     var newWidth;
     switch(size) {
@@ -445,6 +447,7 @@ var resizePizzas = function(size) {
     }
   }
 
+  // function taken from Cam
   function getDomNodeArray(selector) {
   // get the elements as a DOM collection
     var elemCollection = document.querySelectorAll(selector);
@@ -501,6 +504,8 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
+  // caching the ScrollTop value means the browser doesn't have to calculate
+  // layout for every pizza, preventing dozens of forced synchronous layout calculations
   var cachedScrollTop = document.body.scrollTop;
   for (var i = 0; i < items.length; i++) {
     var phase = Math.sin((cachedScrollTop / 1250) + (i % 5));
@@ -524,6 +529,8 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  // changes the number of elements to 40 - we don't need 200 pizzas floating around
+  // this saves on the amount of time needed for composite layer and paint
   for (var i = 0; i < 40; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
